@@ -1,4 +1,5 @@
 import '../styles/globals.css';
+// import 'tailwindcss/tailwind.css';
 import { AuthProvider } from '@/lib/auth';
 
 function MyApp({ Component, pageProps }) {
