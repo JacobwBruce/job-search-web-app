@@ -17,24 +17,29 @@ const Header = () => {
                         Job<span className='text-indigo-600'>Search</span>
                     </h4>
                 </div>
-                <div className='flex sm:h-full items-center'>
-                    <div className='mx-4 flex items-center border-indigo-600 border-b-4 h-full'>
-                        <Link href='/search'>Search Jobs</Link>
+                <div className='flex sm:h-full flex-col-reverse sm:flex-row'>
+                    <div className='flex sm:h-full items-center'>
+                        <div className='mx-4 flex items-center border-indigo-600 border-b-4 h-full'>
+                            <Link href='/'>Home</Link>
+                        </div>
+                        <div className='mx-4 flex items-center border-indigo-600 border-b-4 h-full'>
+                            <Link href='/search'>Search Jobs</Link>
+                        </div>
+                        <div className='mx-4 flex items-center border-indigo-600 border-b-4 h-full'>
+                            <Link href='/dashboard'>Dashboard</Link>
+                        </div>
                     </div>
-                    <div className='mx-4 flex items-center border-indigo-600 border-b-4 h-full'>
-                        <Link href='/dashboard'>Dashboard</Link>
+                    <div className='flex items-center'>
+                        {user ? (
+                            <Dropdown text={user.email}>
+                                <DropdownItem onClick={async () => firebase.auth().signOut()}>
+                                    Sign Out
+                                </DropdownItem>
+                            </Dropdown>
+                        ) : (
+                            <Link href='/login'>Sign In</Link>
+                        )}
                     </div>
-                </div>
-                <div>
-                    {user ? (
-                        <Dropdown text={user.email}>
-                            <DropdownItem onClick={async () => firebase.auth().signOut()}>
-                                Sign Out
-                            </DropdownItem>
-                        </Dropdown>
-                    ) : (
-                        <button>Sign In</button>
-                    )}
                 </div>
             </div>
         </nav>
