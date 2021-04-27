@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { FC } from 'react';
 import '@/styles/Dropdown.module.css';
 
-const Dropdown = ({ children }) => {
+interface Props {
+    text: string;
+}
+
+const Dropdown: FC<Props> = ({ children, text }) => {
     return (
         <div className='group inline-block'>
-            <button className='outline-none focus:outline-none border px-3 py-1 bg-white rounded-sm flex items-center min-w-32'>
-                <span className='pr-1 font-semibold flex-1'>Dropdown</span>
+            <button className='outline-none focus:outline-none px-3 py-1 bg-white rounded-sm flex items-center min-w-32'>
+                <span className='pr-1 font-semibold flex-1'>{text}</span>
                 <span>
                     <svg
                         className='fill-current h-4 w-4 transform group-hover:-rotate-180
@@ -19,7 +23,7 @@ const Dropdown = ({ children }) => {
             </button>
             <ul
                 className='bg-white border rounded-sm transform scale-0 group-hover:scale-100 absolute 
-  transition duration-150 ease-in-out origin-top min-w-32'
+  transition duration-150 ease-in-out origin-top w-64 text-center'
             >
                 {children}
             </ul>
