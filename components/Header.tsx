@@ -1,13 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth';
 import Dropdown from './Dropdown';
 import DropdownItem from './DropdownItem';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import { useRouter } from 'next/router';
 
 const Header = () => {
     const { user } = useAuth();
+    const router = useRouter();
+
+    const drawBorder = (tabName: string) => {
+        if (tabName === router.pathname) {
+            return 'border-indigo-600 border-b-4';
+        }
+    };
 
     return (
         <nav className='bg-white h-36 shadow sm:h-16'>
@@ -19,13 +27,15 @@ const Header = () => {
                 </div>
                 <div className='flex sm:h-full flex-col-reverse sm:flex-row'>
                     <div className='flex sm:h-full items-center'>
-                        <div className='mx-4 flex items-center border-indigo-600 border-b-4 h-full'>
+                        <div className={`mx-4 flex items-center h-full ${drawBorder('/')}`}>
                             <Link href='/'>Home</Link>
                         </div>
-                        <div className='mx-4 flex items-center border-indigo-600 border-b-4 h-full'>
+                        <div className={`mx-4 flex items-center h-full ${drawBorder('/search')}`}>
                             <Link href='/search'>Search Jobs</Link>
                         </div>
-                        <div className='mx-4 flex items-center border-indigo-600 border-b-4 h-full'>
+                        <div
+                            className={`mx-4 flex items-center h-full ${drawBorder('/dashboard')}`}
+                        >
                             <Link href='/dashboard'>Dashboard</Link>
                         </div>
                     </div>
