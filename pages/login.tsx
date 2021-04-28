@@ -1,12 +1,27 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import firebaseClient from '@/lib/firebaseClient';
 import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { useAuth } from '@/lib/auth';
+
+interface FormValues {
+    email: string;
+    password: string;
+}
 
 const login: FC = () => {
-    const [email, setEmail] = useState('');
-    const [pass, setPass] = useState('');
+    const { user } = useAuth();
+
+    if (user) {
+        window.location.href = '/';
+    }
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<FormValues>();
 
     return (
         <div className='h-full flex justify-center items-center'>
@@ -21,7 +36,19 @@ const login: FC = () => {
                     </p>
                 </div>
                 <div className='bg-white py-8 px-6 shadow rounded-lg sm:px-10 sm:w-96'>
-                    <div className='mb-0 space-y-6'>
+                    <form
+                        className='mb-0 space-y-6'
+                        onSubmit={handleSubmit(async ({ email, password }) => {
+                            await firebase
+                                .auth()
+                                .signInWithEmailAndPassword(email, password)
+                                .then(() => (window.location.href = '/'))
+                                .catch((error) => {
+                                    const message = error.message;
+                                    alert(message);
+                                });
+                        })}
+                    >
                         <div>
                             <label
                                 htmlFor='email'
@@ -34,13 +61,12 @@ const login: FC = () => {
                                     className='w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm 
                                     focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 
                                     '
-                                    id='email'
-                                    name='email'
                                     type='email'
                                     autoComplete='email'
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    {...register('email', { required: true })}
                                 />
                             </div>
+                            {errors.email && <p className='text-red-600'>Email is required</p>}
                         </div>
                         <div>
                             <label
@@ -54,13 +80,14 @@ const login: FC = () => {
                                     className='w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm 
                                     focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 
                                     '
-                                    id='password'
-                                    name='password'
                                     type='password'
                                     autoComplete='password'
-                                    onChange={(e) => setPass(e.target.value)}
+                                    {...register('password', { required: true })}
                                 />
                             </div>
+                            {errors.password && (
+                                <p className='text-red-600'>Password is required</p>
+                            )}
                         </div>
 
                         <div className='mt-2'>
@@ -68,16 +95,7 @@ const login: FC = () => {
                                 className=' bg-indigo-500 text-white rounded-lg w-full py-2 focus:ring
                                  focus:ring-indigo-500 focus:ring-offset-2'
                                 style={{ outline: 'none' }}
-                                onClick={async () => {
-                                    await firebase
-                                        .auth()
-                                        .signInWithEmailAndPassword(email, pass)
-                                        .then(() => (window.location.href = '/'))
-                                        .catch((error) => {
-                                            const message = error.message;
-                                            alert(message);
-                                        });
-                                }}
+                                type='submit'
                             >
                                 Login
                             </button>
@@ -97,7 +115,7 @@ const login: FC = () => {
             >
                 Register
             </button> */}
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
