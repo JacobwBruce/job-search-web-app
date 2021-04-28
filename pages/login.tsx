@@ -100,21 +100,6 @@ const login: FC = () => {
                                 Login
                             </button>
                         </div>
-
-                        {/* <button
-                onClick={async () => {
-                    await firebase
-                        .auth()
-                        .createUserWithEmailAndPassword(email, pass)
-                        .then(() => (window.location.href = '/'))
-                        .catch((error) => {
-                            const message = error.message;
-                            alert(message);
-                        });
-                }}
-            >
-                Register
-            </button> */}
                     </form>
                 </div>
             </div>
