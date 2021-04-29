@@ -19,7 +19,7 @@ const Header = () => {
 
     return (
         <nav className='bg-white h-36 shadow sm:h-16'>
-            <div className='flex justify-between items-center mx-auto max-w-8xl px-8 h-full flex-col sm:flex-row'>
+            <div className='flex justify-between items-center mx-auto max-w-screen-2xl px-8 h-full flex-col sm:flex-row'>
                 <div>
                     <h4 className='font-bold text-3xl'>
                         Job<span className='text-indigo-600'>Search</span>

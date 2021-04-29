@@ -1,13 +1,19 @@
-import React, { FC } from 'react';
+import React from 'react';
 import nookies from 'nookies';
-import firebase from 'firebase/app';
-import firebaseClient from '@/lib/firebaseClient';
 import { GetServerSideProps } from 'next';
 import { verifyIdToken } from '@/lib/firebaseAdmin';
+import Header from '@/components/Header';
 
-const authenticated = ({ user }) => {
+const dashboard = ({ user }) => {
     if (user) {
-        return <div>Authenticated route</div>;
+        return (
+            <>
+                <Header />
+                <div>
+                    <h1 className='text-4xl mt-10 text-center'>Dashboard Page</h1>
+                </div>
+            </>
+        );
     } else {
         return <div>Loading...</div>;
     }
@@ -32,4 +38,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 };
 
-export default authenticated;
+export default dashboard;
