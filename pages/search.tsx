@@ -4,6 +4,7 @@ import { GetServerSideProps } from 'next';
 import InitialSearchPage from '@/components/InitialSearchPage';
 import JobResults from '@/components/JobResults';
 import axios from 'axios';
+import { JobType } from 'types/JobType';
 
 export interface SearchFormValues {
     search: string;
@@ -12,7 +13,7 @@ export interface SearchFormValues {
 }
 
 const Search = ({ search, where, company }) => {
-    const [jobs, setJobs] = useState([]);
+    const [jobs, setJobs] = useState<Array<JobType>>([]);
     const [loading, setLoading] = useState<boolean>(search);
 
     useEffect(() => {
@@ -21,11 +22,30 @@ const Search = ({ search, where, company }) => {
         }
     }, []);
 
+    const formatJobData = (s: string): string => {
+        return s.replaceAll('<strong>', '').replaceAll('</strong>', '');
+    };
+
     const queryJobs = async () => {
-        const { data } = await axios.get(
-            `https://api.adzuna.com/v1/api/jobs/ca/search/1?app_id=${process.env.NEXT_PUBLIC_ADZUNA_ID}&app_key=${process.env.NEXT_PUBLIC_ADZUNA_KEY}&what=${search}`
-        );
-        console.log(data);
+        try {
+            let queryOptions = `&what=${search}`;
+
+            if (where) queryOptions += `&where=${where}`;
+            if (company) queryOptions += `&company=${company}`;
+
+            const { data } = await axios.get(
+                `https://api.adzuna.com/v1/api/jobs/ca/search/1?app_id=${process.env.NEXT_PUBLIC_ADZUNA_ID}&app_key=${process.env.NEXT_PUBLIC_ADZUNA_KEY}${queryOptions}`
+            );
+
+            for (let i = 0; i < data.results.length; i++) {
+                data.results[i].title = formatJobData(data.results[i].title);
+                data.results[i].description = formatJobData(data.results[i].description);
+            }
+
+            setJobs(data.results);
+        } catch (error) {
+            console.error(error);
+        }
         setLoading(false);
     };
 
@@ -34,7 +54,7 @@ const Search = ({ search, where, company }) => {
             <Header />
             {!search && <InitialSearchPage />}
             {loading && <div>loading</div>}
-            {!loading && search && <JobResults />}
+            {!loading && search && <JobResults jobs={jobs} />}
         </>
     );
 };
