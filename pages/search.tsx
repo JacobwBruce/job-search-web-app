@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import InitialSearchPage from '@/components/InitialSearchPage';
 import JobResults from '@/components/JobResults';
+import axios from 'axios';
 
 export interface SearchFormValues {
     search: string;
@@ -10,15 +11,23 @@ export interface SearchFormValues {
     company: string;
 }
 
-const search = ({ search, where, company }) => {
+const Search = ({ search, where, company }) => {
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState<boolean>(search);
 
     useEffect(() => {
-        //make a request to API
-
-        setLoading(false);
+        if (search) {
+            queryJobs();
+        }
     }, []);
+
+    const queryJobs = async () => {
+        const { data } = await axios.get(
+            `https://api.adzuna.com/v1/api/jobs/ca/search/1?app_id=${process.env.NEXT_PUBLIC_ADZUNA_ID}&app_key=${process.env.NEXT_PUBLIC_ADZUNA_KEY}&what=${search}`
+        );
+        console.log(data);
+        setLoading(false);
+    };
 
     return (
         <>
@@ -40,4 +49,4 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     };
 };
 
-export default search;
+export default Search;
