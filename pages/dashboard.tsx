@@ -1,11 +1,9 @@
-import React, { FC } from 'react';
+import React from 'react';
 import nookies from 'nookies';
-import firebase from 'firebase/app';
-import firebaseClient from '@/lib/firebaseClient';
 import { GetServerSideProps } from 'next';
 import { verifyIdToken } from '@/lib/firebaseAdmin';
 
-const authenticated = ({ user }) => {
+const dashboard = ({ user }) => {
     if (user) {
         return <div>Authenticated route</div>;
     } else {
@@ -32,4 +30,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 };
 
-export default authenticated;
+export default dashboard;
