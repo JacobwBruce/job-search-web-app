@@ -2,10 +2,18 @@ import React from 'react';
 import nookies from 'nookies';
 import { GetServerSideProps } from 'next';
 import { verifyIdToken } from '@/lib/firebaseAdmin';
+import Header from '@/components/Header';
 
 const dashboard = ({ user }) => {
     if (user) {
-        return <div>Authenticated route</div>;
+        return (
+            <>
+                <Header />
+                <div>
+                    <h1 className='text-4xl mt-10 text-center'>Dashboard Page</h1>
+                </div>
+            </>
+        );
     } else {
         return <div>Loading...</div>;
     }
