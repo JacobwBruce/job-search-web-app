@@ -5,6 +5,7 @@ import InitialSearchPage from '@/components/InitialSearchPage';
 import JobResults from '@/components/JobResults';
 import axios from 'axios';
 import { JobType } from 'types/JobType';
+import Head from 'next/head';
 
 export interface SearchFormValues {
     search: string;
@@ -51,6 +52,9 @@ const Search = ({ search, where, company }) => {
 
     return (
         <>
+            <Head>
+                <title>Search Jobs</title>
+            </Head>
             <Header />
             {!search && <InitialSearchPage />}
             {loading && <div>loading</div>}
