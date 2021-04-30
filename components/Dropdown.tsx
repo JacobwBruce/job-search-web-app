@@ -23,7 +23,7 @@ const Dropdown: FC<Props> = ({ children, text }) => {
             </button>
             <ul
                 className='bg-white border rounded-sm transform scale-0 group-hover:scale-100 absolute 
-  transition duration-150 ease-in-out origin-top w-64 text-center'
+  transition duration-150 ease-in-out origin-top w-32 text-center'
             >
                 {children}
             </ul>

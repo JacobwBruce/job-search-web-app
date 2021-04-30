@@ -3,11 +3,15 @@ import nookies from 'nookies';
 import { GetServerSideProps } from 'next';
 import { verifyIdToken } from '@/lib/firebaseAdmin';
 import Header from '@/components/Header';
+import Head from 'next/head';
 
 const dashboard = ({ user }) => {
     if (user) {
         return (
             <>
+                <Head>
+                    <title>Dashboard</title>
+                </Head>
                 <Header />
                 <div>
                     <h1 className='text-4xl mt-10 text-center'>Dashboard Page</h1>
