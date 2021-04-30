@@ -4,6 +4,8 @@ import 'firebase/auth';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '@/lib/auth';
+import { FcGoogle } from 'react-icons/fc';
+import { AiFillGithub } from 'react-icons/ai';
 
 interface FormValues {
     email: string;
@@ -93,7 +95,7 @@ const login: FC = () => {
                         <div className='mt-2'>
                             <button
                                 className=' bg-indigo-500 text-white rounded-lg w-full py-2 focus:ring
-                                 focus:ring-indigo-500 focus:ring-offset-2'
+                                 focus:ring-indigo-500 focus:ring-offset-2 hover:bg-indigo-600 hover:shadow-lg transition-all'
                                 style={{ outline: 'none' }}
                                 type='submit'
                             >
@@ -101,6 +103,41 @@ const login: FC = () => {
                             </button>
                         </div>
                     </form>
+                    <div className='mt-4'>
+                        <div className='flex items-center'>
+                            <div className=' h-0.5 rounded w-full bg-gray-300'></div>
+                            <p className='text-gray-300 mx-3'>OR</p>
+                            <div className=' h-0.5 rounded w-full bg-gray-300'></div>
+                        </div>
+                        <div className='flex items-center justify-center space-x-10 mt-3'>
+                            <button
+                                onClick={async () => {
+                                    await firebase
+                                        .auth()
+                                        .signInWithPopup(new firebase.auth.GoogleAuthProvider())
+                                        .then(() => (window.location.href = '/'))
+                                        .catch((error) => alert(error));
+                                }}
+                                className=' border border-gray-300 b-1 rounded-lg px-5 py-1 hover:shadow-lg hover:border-indigo-500 transition-all'
+                                style={{ outline: 'none' }}
+                            >
+                                <FcGoogle className='text-4xl' />
+                            </button>
+                            <button
+                                onClick={async () => {
+                                    await firebase
+                                        .auth()
+                                        .signInWithPopup(new firebase.auth.GithubAuthProvider())
+                                        .then(() => (window.location.href = '/'))
+                                        .catch((error) => alert(error));
+                                }}
+                                className='border border-gray-300 b-1 rounded-lg px-5 py-1 hover:shadow-lg hover:border-indigo-500 transition-all'
+                                style={{ outline: 'none' }}
+                            >
+                                <AiFillGithub className='text-4xl' />
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
