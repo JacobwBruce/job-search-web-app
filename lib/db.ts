@@ -8,3 +8,12 @@ export const createUser = (uid: string, data: any) => {
         .doc(uid)
         .set({ uid, ...data }, { merge: true });
 };
+
+export const bookmarkJob = (userId: string, jobId: string, job: any) => {
+    return firestore
+        .collection('users')
+        .doc(userId)
+        .collection('bookmarks')
+        .doc(jobId)
+        .set({ jobId, ...job }, { merge: true });
+};
