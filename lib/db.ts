@@ -24,6 +24,10 @@ export const getUserBookmarks = async (userId: string) => {
     return snapshot.docs.map((doc) => doc.data());
 };
 
+export const deleteJobBookmark = (userId: string, jobId: string) => {
+    return firestore.collection('users').doc(userId).collection('bookmarks').doc(jobId).delete();
+};
+
 const cleanJobData = (job: JobType) => {
     const newJob = job;
 

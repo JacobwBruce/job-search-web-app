@@ -6,7 +6,7 @@ import JobResults from '@/components/JobResults';
 import axios from 'axios';
 import { JobType } from 'types/JobType';
 import Head from 'next/head';
-import { bookmarkJob, getUserBookmarks } from '@/lib/db';
+import { bookmarkJob, deleteJobBookmark, getUserBookmarks } from '@/lib/db';
 import { useAuth } from '@/lib/auth';
 
 export interface SearchFormValues {
@@ -44,14 +44,17 @@ const Search = ({ search, where, company }) => {
     };
 
     const saveJob = (job: JobType) => {
+        setLoading(true);
         bookmarkJob(user.uid, job);
         getBookmarks();
-        alert('saved job');
+        setLoading(false);
     };
 
     const removeJob = (job: JobType) => {
-        //save the job to Firebase
-        console.log(job);
+        setLoading(true);
+        deleteJobBookmark(user.uid, job.id);
+        getBookmarks();
+        setLoading(false);
     };
 
     const queryJobs = async () => {
