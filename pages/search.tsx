@@ -6,6 +6,8 @@ import JobResults from '@/components/JobResults';
 import axios from 'axios';
 import { JobType } from 'types/JobType';
 import Head from 'next/head';
+import { bookmarkJob, getUserBookmarks } from '@/lib/db';
+import { useAuth } from '@/lib/auth';
 
 export interface SearchFormValues {
     search: string;
@@ -16,6 +18,20 @@ export interface SearchFormValues {
 const Search = ({ search, where, company }) => {
     const [jobs, setJobs] = useState<Array<JobType>>([]);
     const [loading, setLoading] = useState<boolean>(search);
+    const { user } = useAuth();
+
+    const [bookmarkedJobs, setBookmarkedJobs] = useState([]);
+
+    useEffect(() => {
+        getBookmarks();
+    }, [user]);
+
+    const getBookmarks = async () => {
+        if (user) {
+            const data = await getUserBookmarks(user.uid);
+            setBookmarkedJobs(data);
+        }
+    };
 
     useEffect(() => {
         if (search) {
@@ -25,6 +41,17 @@ const Search = ({ search, where, company }) => {
 
     const formatJobData = (s: string): string => {
         return s.replaceAll('<strong>', '').replaceAll('</strong>', '');
+    };
+
+    const saveJob = (job: JobType) => {
+        bookmarkJob(user.uid, job);
+        getBookmarks();
+        alert('saved job');
+    };
+
+    const removeJob = (job: JobType) => {
+        //save the job to Firebase
+        console.log(job);
     };
 
     const queryJobs = async () => {
@@ -58,7 +85,14 @@ const Search = ({ search, where, company }) => {
             <Header />
             {!search && <InitialSearchPage />}
             {loading && <div>loading</div>}
-            {!loading && search && <JobResults jobs={jobs} />}
+            {!loading && search && (
+                <JobResults
+                    jobs={jobs}
+                    bookmarkedJobs={bookmarkedJobs}
+                    saveJob={saveJob}
+                    removeJob={removeJob}
+                />
+            )}
         </>
     );
 };

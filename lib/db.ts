@@ -19,6 +19,11 @@ export const bookmarkJob = (userId: string, job: JobType) => {
         .set(cleanJobData(job), { merge: true });
 };
 
+export const getUserBookmarks = async (userId: string) => {
+    const snapshot = await firestore.collection('users').doc(userId).collection('bookmarks').get();
+    return snapshot.docs.map((doc) => doc.data());
+};
+
 const cleanJobData = (job: JobType) => {
     const newJob = job;
 

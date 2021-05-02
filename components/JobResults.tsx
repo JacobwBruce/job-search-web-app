@@ -3,31 +3,32 @@ import { JobType } from 'types/JobType';
 import JobSearchForm from './JobSearchForm';
 import { ImLocation } from 'react-icons/im';
 import { BsBookmarkPlus, BsFillBookmarkFill } from 'react-icons/bs';
-import { bookmarkJob } from '@/lib/db';
-import { useAuth } from '@/lib/auth';
 
 interface Props {
     jobs: Array<JobType>;
+    bookmarkedJobs: Array<any>;
+    saveJob: (job: JobType) => void;
+    removeJob: (job: JobType) => void;
 }
 
-const JobResults: FC<Props> = ({ jobs }) => {
-    const { user } = useAuth();
-
+const JobResults: FC<Props> = ({ jobs, bookmarkedJobs, saveJob, removeJob }) => {
     const formatIsoDate = (isoDate: string): string => {
         var d = new Date(isoDate);
         return d.toLocaleDateString('en-US');
     };
 
-    const saveJob = (job: JobType) => {
-        bookmarkJob(user.uid, job);
-        alert('saved job');
+    const checkIfBookmarked = (job: JobType): boolean => {
+        let flag = false;
+
+        bookmarkedJobs.forEach((bookmark) => {
+            if (bookmark.id === job.id) {
+                flag = true;
+            }
+        });
+
+        return flag;
     };
 
-    const removeJob = (job: JobType) => {
-        //save the job to Firebase
-        console.log(job);
-    };
-    console.log(jobs);
     return (
         <div className='flex flex-col items-center mt-5 w-full space-y-8 pb-10'>
             <JobSearchForm />
@@ -38,14 +39,17 @@ const JobResults: FC<Props> = ({ jobs }) => {
                 >
                     <div className='flex justify-between items-center'>
                         <span className='text-2xl font-bold'>{job.title}</span>
-                        <BsBookmarkPlus
-                            className='text-xl cursor-pointer'
-                            onClick={() => saveJob(job)}
-                        />
-                        {/* <BsFillBookmarkFill
-                            className='text-xl cursor-pointer text-indigo-500'
-                            onClick={() => removeJob(job)}
-                        /> */}
+                        {!checkIfBookmarked(job) ? (
+                            <BsBookmarkPlus
+                                className='text-xl cursor-pointer'
+                                onClick={() => saveJob(job)}
+                            />
+                        ) : (
+                            <BsFillBookmarkFill
+                                className='text-xl cursor-pointer text-indigo-500'
+                                onClick={() => removeJob(job)}
+                            />
+                        )}
                     </div>
                     <p className='text-gray-400 flex items-center'>
                         <span className='mr-3'>{job.company.display_name}</span>
