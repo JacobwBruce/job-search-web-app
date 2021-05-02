@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import nookies from 'nookies';
 import { GetServerSideProps } from 'next';
 import { verifyIdToken } from '@/lib/firebaseAdmin';
 import Header from '@/components/Header';
 import Head from 'next/head';
+import { getUserBookmarks } from '@/lib/db';
 
 const dashboard = ({ user }) => {
+    useEffect(() => {
+        getBookmarks();
+    }, []);
+
+    const getBookmarks = async () => {
+        const data = await getUserBookmarks(user.uid);
+    };
+
     if (user) {
         return (
             <>
