@@ -3,27 +3,31 @@ import { JobType } from 'types/JobType';
 import JobSearchForm from './JobSearchForm';
 import { ImLocation } from 'react-icons/im';
 import { BsBookmarkPlus, BsFillBookmarkFill } from 'react-icons/bs';
+import { bookmarkJob } from '@/lib/db';
+import { useAuth } from '@/lib/auth';
 
 interface Props {
     jobs: Array<JobType>;
 }
 
 const JobResults: FC<Props> = ({ jobs }) => {
+    const { user } = useAuth();
+
     const formatIsoDate = (isoDate: string): string => {
         var d = new Date(isoDate);
         return d.toLocaleDateString('en-US');
     };
 
     const saveJob = (job: JobType) => {
-        //save the job to Firebase
-        console.log(job);
+        bookmarkJob(user.uid, job);
+        alert('saved job');
     };
 
     const removeJob = (job: JobType) => {
         //save the job to Firebase
         console.log(job);
     };
-
+    console.log(jobs);
     return (
         <div className='flex flex-col items-center mt-5 w-full space-y-8 pb-10'>
             <JobSearchForm />
