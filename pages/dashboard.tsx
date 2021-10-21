@@ -5,6 +5,7 @@ import { verifyIdToken } from '@/lib/firebaseAdmin';
 import Header from '@/components/Header';
 import Head from 'next/head';
 import { getUserBookmarks } from '@/lib/db';
+import Loader from '@/components/Loader';
 
 const dashboard = ({ user }) => {
     useEffect(() => {
@@ -28,7 +29,7 @@ const dashboard = ({ user }) => {
             </>
         );
     } else {
-        return <div>Loading...</div>;
+        return <Loader />;
     }
 };
 
