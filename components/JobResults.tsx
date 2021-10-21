@@ -3,6 +3,7 @@ import { JobType } from 'types/JobType';
 import JobSearchForm from './JobSearchForm';
 import { ImLocation } from 'react-icons/im';
 import { BsBookmarkPlus, BsFillBookmarkFill } from 'react-icons/bs';
+import { formatIsoDate } from 'utilities/formatIsoDate';
 
 interface Props {
     jobs: Array<JobType>;
@@ -12,11 +13,6 @@ interface Props {
 }
 
 const JobResults: FC<Props> = ({ jobs, bookmarkedJobs, saveJob, removeJob }) => {
-    const formatIsoDate = (isoDate: string): string => {
-        var d = new Date(isoDate);
-        return d.toLocaleDateString('en-US');
-    };
-
     const checkIfBookmarked = (job: JobType): boolean => {
         let flag = false;
 
