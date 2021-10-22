@@ -13,10 +13,7 @@ interface Props {
 
 const JobCard: FC<Props> = ({ job, saveJob, removeJob, bookmarked }) => {
     return (
-        <div
-            key={job.id}
-            className='bg-white py-6 space-y-3 max-w-5xl px-6 shadow-sm rounded-lg sm:px-10 ml-0 sm:ml-5 w-full'
-        >
+        <div className='bg-white py-6 space-y-3 max-w-5xl px-6 shadow-sm rounded-lg sm:px-10 ml-0 sm:ml-5 w-full'>
             <div className='flex justify-between items-center'>
                 <span className='text-2xl font-bold'>{job.title}</span>
                 {!bookmarked ? (

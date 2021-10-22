@@ -25,9 +25,9 @@ const JobResults: FC<Props> = ({ jobs, bookmarkedJobs, saveJob, removeJob }) => 
 
     return (
         <div className='flex flex-col items-center mt-5 w-full space-y-8 pb-10'>
-            <JobSearchForm />
             {jobs.map((job) => (
                 <JobCard
+                    key={job.id}
                     job={job}
                     saveJob={saveJob}
                     removeJob={removeJob}
