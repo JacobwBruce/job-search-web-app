@@ -8,6 +8,8 @@ import { JobType } from 'types/JobType';
 import Head from 'next/head';
 import { bookmarkJob, deleteJobBookmark, getUserBookmarks } from '@/lib/db';
 import { useAuth } from '@/lib/auth';
+import Loader from '@/components/Loader';
+import JobSearchForm from '@/components/JobSearchForm';
 
 export interface SearchFormValues {
     search: string;
@@ -87,14 +89,17 @@ const Search = ({ search, where, company }) => {
             </Head>
             <Header />
             {!search && <InitialSearchPage />}
-            {loading && <div>loading</div>}
+            {loading && <Loader />}
             {!loading && search && (
-                <JobResults
-                    jobs={jobs}
-                    bookmarkedJobs={bookmarkedJobs}
-                    saveJob={saveJob}
-                    removeJob={removeJob}
-                />
+                <>
+                    <JobSearchForm />
+                    <JobResults
+                        jobs={jobs}
+                        bookmarkedJobs={bookmarkedJobs}
+                        saveJob={saveJob}
+                        removeJob={removeJob}
+                    />
+                </>
             )}
         </>
     );
