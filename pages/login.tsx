@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import Link from 'next/link';
@@ -7,6 +7,8 @@ import { useAuth } from '@/lib/auth';
 import { FcGoogle } from 'react-icons/fc';
 import { AiFillGithub } from 'react-icons/ai';
 import Head from 'next/head';
+import Alert from '@/components/Alert';
+import { ErrorType } from '../types/ErrorType';
 
 interface FormValues {
     email: string;
@@ -15,6 +17,7 @@ interface FormValues {
 
 const login: FC = () => {
     const { user } = useAuth();
+    const [error, setError] = useState<ErrorType | null>();
 
     if (user) {
         window.location.href = '/';
@@ -31,7 +34,11 @@ const login: FC = () => {
             <Head>
                 <title>Login</title>
             </Head>
-
+            {error && (
+                <Alert title={error.title} color={error.color} fixed={true}>
+                    {error.message}
+                </Alert>
+            )}
             <div className='h-full flex justify-center items-center'>
                 <div>
                     <div className='mb-6 space-y-5'>
@@ -53,7 +60,11 @@ const login: FC = () => {
                                     .then(() => (window.location.href = '/'))
                                     .catch((error) => {
                                         const message = error.message;
-                                        alert(message);
+                                        setError({
+                                            title: 'Error signing in',
+                                            message,
+                                            color: 'red',
+                                        });
                                     });
                             })}
                         >
@@ -122,7 +133,13 @@ const login: FC = () => {
                                             .auth()
                                             .signInWithPopup(new firebase.auth.GoogleAuthProvider())
                                             .then(() => (window.location.href = '/'))
-                                            .catch((error) => alert(error));
+                                            .catch((error) =>
+                                                setError({
+                                                    title: 'Error signing in with Google',
+                                                    message: error.message,
+                                                    color: 'red',
+                                                })
+                                            );
                                     }}
                                     className=' border border-gray-300 b-1 rounded-lg px-5 py-1 hover:shadow-lg hover:border-indigo-500 transition-all'
                                     style={{ outline: 'none' }}
@@ -135,7 +152,13 @@ const login: FC = () => {
                                             .auth()
                                             .signInWithPopup(new firebase.auth.GithubAuthProvider())
                                             .then(() => (window.location.href = '/'))
-                                            .catch((error) => alert(error));
+                                            .catch((error) =>
+                                                setError({
+                                                    title: 'Error signing in with GitHub',
+                                                    message: error.message,
+                                                    color: 'red',
+                                                })
+                                            );
                                     }}
                                     className='border border-gray-300 b-1 rounded-lg px-5 py-1 hover:shadow-lg hover:border-indigo-500 transition-all'
                                     style={{ outline: 'none' }}
