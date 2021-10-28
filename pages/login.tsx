@@ -136,7 +136,7 @@ const login: FC = () => {
                                             .catch((error) =>
                                                 setError({
                                                     title: 'Error signing in with Google',
-                                                    message: error,
+                                                    message: error.message,
                                                     color: 'red',
                                                 })
                                             );
@@ -155,7 +155,7 @@ const login: FC = () => {
                                             .catch((error) =>
                                                 setError({
                                                     title: 'Error signing in with GitHub',
-                                                    message: error,
+                                                    message: error.message,
                                                     color: 'red',
                                                 })
                                             );
