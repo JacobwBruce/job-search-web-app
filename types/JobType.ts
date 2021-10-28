@@ -11,5 +11,6 @@ export interface JobType {
     redirect_url: string;
     salary_is_predicted: string;
     title: string;
+    status?: string;
     __CLASS__: string;
 }
