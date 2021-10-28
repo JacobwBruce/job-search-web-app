@@ -3,12 +3,15 @@ import React, { FC } from 'react';
 interface Props {
     title: string;
     color: string;
+    fixed?: boolean;
 }
 
-const Alert: FC<Props> = ({ title, color, children }) => {
+const Alert: FC<Props> = ({ title, color, children, fixed = false }) => {
     return (
         <div
-            className={`bg-${color}-100 border-t-4 border-${color}-500 rounded-b text-${color}-900 px-4 py-3 shadow-md`}
+            className={`bg-${color}-100 border-t-4 border-${color}-500 rounded-b text-${color}-900 px-4 py-3 shadow-md ${
+                fixed && 'fixed w-full'
+            }`}
             role='alert'
         >
             <div className='flex'>
