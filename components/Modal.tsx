@@ -1,4 +1,4 @@
-import React, { FC, Fragment, ReactElement, useRef, useState } from 'react';
+import React, { FC, Fragment, ReactElement, useEffect, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 
 interface Props {
@@ -6,10 +6,13 @@ interface Props {
     icon: ReactElement;
     color: string;
     callback?: Function;
+    buttonText: string;
 }
 
-const Modal: FC<Props> = ({ title, icon, color, children, callback }) => {
+const Modal: FC<Props> = ({ title, icon, color, children, callback, buttonText }) => {
     const [open, setOpen] = useState(true);
+    const [colorClassesOne, setColorClassesOne] = useState<string>('');
+    const [colorClassesTwo, setColorClassesTwo] = useState<string>('');
 
     const cancelButtonRef = useRef(null);
 
@@ -17,6 +20,47 @@ const Modal: FC<Props> = ({ title, icon, color, children, callback }) => {
         setOpen(false);
         if (callback) callback();
     };
+
+    useEffect(() => {
+        /* 
+        Dynamically setting the color like this -> 'border-${color}-500' doesn't work with Tailwind
+        Need to type out each class strongly, as in the switch statement below so tailwind doesn't 'purge' unused classes
+        */
+        switch (color) {
+            case 'red':
+                setColorClassesOne('focus:ring-red-500 hover:bg-red-700 bg-red-600');
+                setColorClassesTwo('bg-red-100');
+                break;
+            case 'blue':
+                setColorClassesOne('focus:ring-blue-500 hover:bg-blue-700 bg-blue-600');
+                setColorClassesTwo('bg-blue-100');
+                break;
+            case 'yellow':
+                setColorClassesOne('focus:ring-yellow-500 hover:bg-yellow-700 bg-yellow-600');
+                setColorClassesTwo('bg-yellow-100');
+                break;
+            case 'indigo':
+                setColorClassesOne('focus:ring-indigo-500 hover:bg-indigo-700 bg-indigo-600');
+                setColorClassesTwo('bg-indigo-100');
+                break;
+            case 'green':
+                setColorClassesOne('focus:ring-green-500 hover:bg-green-700 bg-green-600');
+                setColorClassesTwo('bg-green-100');
+                break;
+            case 'pink':
+                setColorClassesOne('focus:ring-pink-500 hover:bg-pink-700 bg-pink-600');
+                setColorClassesTwo('bg-pink-100');
+                break;
+            case 'purple':
+                setColorClassesOne('focus:ring-purple-500 hover:bg-purple-700 bg-purple-600');
+                setColorClassesTwo('bg-purple-100');
+                break;
+            case 'gray':
+                setColorClassesOne('focus:ring-gray-500 hover:bg-gray-700 bg-gray-600');
+                setColorClassesTwo('bg-gray-100');
+                break;
+        }
+    }, []);
 
     return (
         <Transition.Root show={open} as={Fragment}>
@@ -58,7 +102,7 @@ const Modal: FC<Props> = ({ title, icon, color, children, callback }) => {
                             <div className='bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4'>
                                 <div className='sm:flex sm:items-start'>
                                     <div
-                                        className={`mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-${color}-100 sm:mx-0 sm:h-10 sm:w-10`}
+                                        className={`mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full ${colorClassesTwo} sm:mx-0 sm:h-10 sm:w-10`}
                                     >
                                         {icon}
                                     </div>
@@ -78,10 +122,10 @@ const Modal: FC<Props> = ({ title, icon, color, children, callback }) => {
                             <div className='bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse'>
                                 <button
                                     type='button'
-                                    className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-${color}-600 text-base font-medium text-white hover:bg-${color}-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-${color}-500 sm:ml-3 sm:w-auto sm:text-sm`}
+                                    className={`w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 ${colorClassesOne} text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm`}
                                     onClick={action}
                                 >
-                                    Deactivate
+                                    {buttonText}
                                 </button>
                                 <button
                                     type='button'
