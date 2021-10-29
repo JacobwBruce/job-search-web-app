@@ -54,8 +54,8 @@ const Toast: FC<Props> = ({ title, color, timeout = 5000, children }) => {
 
     return (
         <div
-            className={`fixed right-6 bottom-6 border-l-4 rounded-b px-4 py-3 shadow-md max-w-sm ${colorClasses} ${
-                show ? 'visible' : 'invisible'
+            className={`border-l-4 rounded-b px-4 py-3 shadow-md max-w-sm transition ${colorClasses} ${
+                show ? 'block' : 'hidden'
             }`}
         >
             <div className='flex flex-row flex-nowrap justify-between'>
