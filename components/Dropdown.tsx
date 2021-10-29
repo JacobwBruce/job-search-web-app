@@ -1,8 +1,8 @@
-import React, { FC } from 'react';
+import React, { FC, ReactElement } from 'react';
 import '@/styles/Dropdown.module.css';
 
 interface Props {
-    text: string;
+    text: string | ReactElement;
 }
 
 const Dropdown: FC<Props> = ({ children, text }) => {
