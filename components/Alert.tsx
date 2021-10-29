@@ -17,35 +17,35 @@ const Alert: FC<Props> = ({ title, color, children, fixed = false }) => {
         */
         switch (color) {
             case 'red':
-                setColorClassesOne('bg-red-100 border-red-500 rounded-b text-red-900');
+                setColorClassesOne('bg-red-100 border-red-500 text-red-900');
                 setColorClassesTwo('text-red-500');
                 break;
             case 'blue':
-                setColorClassesOne('bg-blue-100 border-blue-500 rounded-b text-blue-900');
+                setColorClassesOne('bg-blue-100 border-blue-500 text-blue-900');
                 setColorClassesTwo('text-blue-500');
                 break;
             case 'yellow':
-                setColorClassesOne('bg-yellow-100 border-yellow-500 rounded-b text-yellow-900');
+                setColorClassesOne('bg-yellow-100 border-yellow-500 text-yellow-900');
                 setColorClassesTwo('text-yellow-500');
                 break;
             case 'indigo':
-                setColorClassesOne('bg-indigo-100 border-indigo-500 rounded-b text-indigo-900');
+                setColorClassesOne('bg-indigo-100 border-indigo-500 text-indigo-900');
                 setColorClassesTwo('text-indigo-500');
                 break;
             case 'green':
-                setColorClassesOne('bg-green-100 border-green-500 rounded-b text-green-900');
+                setColorClassesOne('bg-green-100 border-green-500 text-green-900');
                 setColorClassesTwo('text-green-500');
                 break;
             case 'pink':
-                setColorClassesOne('bg-pink-100 border-pink-500 rounded-b text-pink-900');
+                setColorClassesOne('bg-pink-100 border-pink-500 text-pink-900');
                 setColorClassesTwo('text-pink-500');
                 break;
             case 'purple':
-                setColorClassesOne('bg-purple-100 border-purple-500 rounded-b text-purple-900');
+                setColorClassesOne('bg-purple-100 border-purple-500 text-purple-900');
                 setColorClassesTwo('text-purple-500');
                 break;
             case 'gray':
-                setColorClassesOne('bg-gray-100 border-gray-500 rounded-b text-gray-900');
+                setColorClassesOne('bg-gray-100 border-gray-500 text-gray-900');
                 setColorClassesTwo('text-gray-500');
                 break;
         }
