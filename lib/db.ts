@@ -31,6 +31,7 @@ export const deleteJobBookmark = (userId: string, jobId: string) => {
 const cleanJobData = (job: JobType) => {
     const newJob = job;
 
+    newJob.status = 'No Status';
     delete newJob.__CLASS__;
     delete newJob.location.__CLASS__;
     delete newJob.category.__CLASS__;
