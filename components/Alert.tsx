@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 
 interface Props {
     title: string;
@@ -7,9 +7,53 @@ interface Props {
 }
 
 const Alert: FC<Props> = ({ title, color, children, fixed = false }) => {
+    const [colorClassesOne, setColorClassesOne] = useState<string>('');
+    const [colorClassesTwo, setColorClassesTwo] = useState<string>('');
+
+    useEffect(() => {
+        /* 
+        Dynamically setting the color like this -> 'border-${color}-500' doesn't work with Tailwind
+        Need to type out each class strongly, as in the switch statement below so tailwind doesn't 'purge' unused classes
+        */
+        switch (color) {
+            case 'red':
+                setColorClassesOne('bg-red-100 border-red-500 rounded-b text-red-900');
+                setColorClassesTwo('text-red-500');
+                break;
+            case 'blue':
+                setColorClassesOne('bg-blue-100 border-blue-500 rounded-b text-blue-900');
+                setColorClassesTwo('text-blue-500');
+                break;
+            case 'yellow':
+                setColorClassesOne('bg-yellow-100 border-yellow-500 rounded-b text-yellow-900');
+                setColorClassesTwo('text-yellow-500');
+                break;
+            case 'indigo':
+                setColorClassesOne('bg-indigo-100 border-indigo-500 rounded-b text-indigo-900');
+                setColorClassesTwo('text-indigo-500');
+                break;
+            case 'green':
+                setColorClassesOne('bg-green-100 border-green-500 rounded-b text-green-900');
+                setColorClassesTwo('text-green-500');
+                break;
+            case 'pink':
+                setColorClassesOne('bg-pink-100 border-pink-500 rounded-b text-pink-900');
+                setColorClassesTwo('text-pink-500');
+                break;
+            case 'purple':
+                setColorClassesOne('bg-purple-100 border-purple-500 rounded-b text-purple-900');
+                setColorClassesTwo('text-purple-500');
+                break;
+            case 'gray':
+                setColorClassesOne('bg-gray-100 border-gray-500 rounded-b text-gray-900');
+                setColorClassesTwo('text-gray-500');
+                break;
+        }
+    }, []);
+
     return (
         <div
-            className={`bg-${color}-100 border-t-4 border-${color}-500 rounded-b text-${color}-900 px-4 py-3 shadow-md ${
+            className={`${colorClassesOne} border-t-4 rounded-b px-4 py-3 shadow-md ${
                 fixed && 'fixed w-full'
             }`}
             role='alert'
@@ -17,7 +61,7 @@ const Alert: FC<Props> = ({ title, color, children, fixed = false }) => {
             <div className='flex'>
                 <div className='py-1'>
                     <svg
-                        className={`fill-current h-6 w-6 text-${color}-500 mr-4`}
+                        className={`fill-current h-6 w-6 ${colorClassesTwo} mr-4`}
                         xmlns='http://www.w3.org/2000/svg'
                         viewBox='0 0 20 20'
                     >
