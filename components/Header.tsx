@@ -12,7 +12,6 @@ const Header = () => {
     const router = useRouter();
 
     const drawBorder = (tabName: string) => {
-        console.log(router.pathname);
         if (tabName === router.pathname) {
             return 'border-indigo-600 border-b-4';
         }
