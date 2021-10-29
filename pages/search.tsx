@@ -10,6 +10,8 @@ import { bookmarkJob, deleteJobBookmark, getUserBookmarks } from '@/lib/db';
 import { useAuth } from '@/lib/auth';
 import Loader from '@/components/Loader';
 import JobSearchForm from '@/components/JobSearchForm';
+import Alert from '@/components/Alert';
+import Toast from '@/components/Toast';
 
 export interface SearchFormValues {
     search: string;
@@ -20,6 +22,7 @@ export interface SearchFormValues {
 const Search = ({ search, where, company }) => {
     const [jobs, setJobs] = useState<Array<JobType>>([]);
     const [loading, setLoading] = useState<boolean>(search);
+    const [alerts, setAlerts] = useState<Array<any>>([]);
     const { user } = useAuth();
 
     const [bookmarkedJobs, setBookmarkedJobs] = useState([]);
@@ -50,6 +53,13 @@ const Search = ({ search, where, company }) => {
         bookmarkJob(user.uid, job);
         getBookmarks();
         setLoading(false);
+        const temp = alerts;
+        temp.push({
+            title: 'Saved Job',
+            color: 'green',
+            message: `Successfully saved ${job.title} posting from ${job.company.display_name}`,
+        });
+        setAlerts(temp);
     };
 
     const removeJob = (job: JobType) => {
@@ -57,6 +67,13 @@ const Search = ({ search, where, company }) => {
         deleteJobBookmark(user.uid, job.id);
         getBookmarks();
         setLoading(false);
+        const temp = alerts;
+        temp.push({
+            title: 'Saved Job',
+            color: 'green',
+            message: `Successfully saved ${job.title} posting from ${job.company.display_name}`,
+        });
+        setAlerts(temp);
     };
 
     const queryJobs = async () => {
@@ -88,6 +105,18 @@ const Search = ({ search, where, company }) => {
                 <title>Search Jobs</title>
             </Head>
             <Header />
+
+            {alerts && (
+                <ul className='fixed bottom-6 right-6 space-y-6'>
+                    {alerts.map((alert) => (
+                        <li>
+                            <Toast title={alert.title} color={alert.color}>
+                                {alert.message}
+                            </Toast>
+                        </li>
+                    ))}
+                </ul>
+            )}
             {!search && <InitialSearchPage />}
             {loading && <Loader />}
             {!loading && search && (

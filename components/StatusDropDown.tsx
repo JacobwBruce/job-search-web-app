@@ -1,10 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
+import { JobType } from 'types/JobType';
 
 interface Props {
+    job: JobType;
     status: string;
+    callback: Function;
 }
 
-const StatusDropDown: FC<Props> = ({ status }) => {
+const StatusDropDown: FC<Props> = ({ job, status, callback }) => {
     const [colorClasses, setColorClasses] = useState<string>('gray');
     const statuses = [
         'Applied',
@@ -19,7 +22,6 @@ const StatusDropDown: FC<Props> = ({ status }) => {
     useEffect(() => {
         switch (status) {
             case statuses[0]:
-                console.log('Setting color to yellow');
                 setColorClasses('bg-yellow-100 text-yellow-800');
                 break;
             case statuses[1]:
@@ -55,7 +57,7 @@ const StatusDropDown: FC<Props> = ({ status }) => {
                 {statuses.map((s) => (
                     <li
                         key={`${s}-dropdown`}
-                        onClick={() => alert(`Changed status to: ${s}`)}
+                        onClick={() => callback(job, s)}
                         className='cursor-pointer rounded-sm px-3 py-1 list hover:bg-indigo-600 hover:text-white'
                     >
                         {s}

@@ -4,7 +4,7 @@ import { GetServerSideProps } from 'next';
 import { verifyIdToken } from '@/lib/firebaseAdmin';
 import Header from '@/components/Header';
 import Head from 'next/head';
-import { deleteJobBookmark, getUserBookmarks } from '@/lib/db';
+import { deleteJobBookmark, getUserBookmarks, updateJobStatus } from '@/lib/db';
 import Loader from '@/components/Loader';
 import { JobType } from 'types/JobType';
 import Table from '@/components/Table';
@@ -19,11 +19,13 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import DropdownItem from '@/components/DropdownItem';
 import Modal from '@/components/Modal';
 import { IoIosAlert } from 'react-icons/io';
+import Toast from '@/components/Toast';
 
 const dashboard = ({ user }) => {
     const [bookmarks, setBookmarks] = useState<Array<JobType>>([]);
     const [selectedJob, setSelectedJob] = useState<JobType | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+    const [alerts, setAlerts] = useState<Array<any>>([]);
 
     useEffect(() => {
         getBookmarks();
@@ -38,9 +40,49 @@ const dashboard = ({ user }) => {
 
     const removeJob = async (job: JobType) => {
         setLoading(true);
-        await deleteJobBookmark(user.uid, job.id);
+
+        await deleteJobBookmark(user.uid, job.id).catch((error) => createErrorToast(error));
         setSelectedJob(null);
+
+        createSuccessfulToast(
+            'Deleted Job',
+            `Successfully deleted ${job.title} posting from ${job.company.display_name}`
+        );
+
         getBookmarks();
+    };
+
+    const changeJobStatus = async (job: JobType, status: string) => {
+        setLoading(true);
+
+        await updateJobStatus(user.uid, job, status).catch((error) => createErrorToast(error));
+
+        createSuccessfulToast(
+            'Updated Job Status',
+            `Successfully updated ${job.title} status to ${status}`
+        );
+
+        getBookmarks();
+    };
+
+    const createSuccessfulToast = (title: string, message: string) => {
+        const temp = alerts;
+        temp.push({
+            title,
+            color: 'green',
+            message,
+        });
+        setAlerts(temp);
+    };
+
+    const createErrorToast = (message: string) => {
+        const temp = alerts;
+        temp.push({
+            title: 'Error',
+            color: 'red',
+            message,
+        });
+        setAlerts(temp);
     };
 
     if (user) {
@@ -50,6 +92,18 @@ const dashboard = ({ user }) => {
                     <title>Dashboard</title>
                 </Head>
                 <Header />
+
+                {alerts && (
+                    <ul className='fixed bottom-6 right-6 space-y-6'>
+                        {alerts.map((alert, index) => (
+                            <li key={`toast-${index}`}>
+                                <Toast title={alert.title} color={alert.color}>
+                                    {alert.message}
+                                </Toast>
+                            </li>
+                        ))}
+                    </ul>
+                )}
 
                 {selectedJob && (
                     <Modal
@@ -70,10 +124,9 @@ const dashboard = ({ user }) => {
                     <Loader />
                 ) : (
                     <>
-                        <div>
-                            <h1 className='text-4xl mt-10 text-center mb-6'>Saved Job Postings</h1>
-                        </div>
-                        <div className='w-full flex justify-center'>
+                        <h1 className='text-4xl mt-10 text-center mb-6'>Saved Job Postings</h1>
+
+                        <div className='flex justify-center'>
                             <Table>
                                 <TableHead>
                                     <tr>
@@ -108,7 +161,11 @@ const dashboard = ({ user }) => {
                                                 </div>
                                             </TD>
                                             <TD>
-                                                <StatusDropDown status={bookmark.status} />
+                                                <StatusDropDown
+                                                    job={bookmark}
+                                                    callback={changeJobStatus}
+                                                    status={bookmark.status}
+                                                />
                                             </TD>
                                             <TD>
                                                 <div className='flex flex-row align-middle'>
