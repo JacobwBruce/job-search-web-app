@@ -19,11 +19,13 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import DropdownItem from '@/components/DropdownItem';
 import Modal from '@/components/Modal';
 import { IoIosAlert } from 'react-icons/io';
+import Toast from '@/components/Toast';
 
 const dashboard = ({ user }) => {
     const [bookmarks, setBookmarks] = useState<Array<JobType>>([]);
     const [selectedJob, setSelectedJob] = useState<JobType | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+    const [alerts, setAlerts] = useState<Array<any>>([]);
 
     useEffect(() => {
         getBookmarks();
@@ -40,6 +42,13 @@ const dashboard = ({ user }) => {
         setLoading(true);
         await deleteJobBookmark(user.uid, job.id);
         setSelectedJob(null);
+        const temp = alerts;
+        temp.push({
+            title: 'Deleted Job',
+            color: 'green',
+            message: `Successfully deleted ${job.title} posting from ${job.company.display_name}`,
+        });
+        setAlerts(temp);
         getBookmarks();
     };
 
@@ -50,6 +59,18 @@ const dashboard = ({ user }) => {
                     <title>Dashboard</title>
                 </Head>
                 <Header />
+
+                {alerts && (
+                    <ul className='fixed bottom-6 right-6 space-y-6'>
+                        {alerts.map((alert) => (
+                            <li>
+                                <Toast title={alert.title} color={alert.color}>
+                                    {alert.message}
+                                </Toast>
+                            </li>
+                        ))}
+                    </ul>
+                )}
 
                 {selectedJob && (
                     <Modal
@@ -70,10 +91,9 @@ const dashboard = ({ user }) => {
                     <Loader />
                 ) : (
                     <>
-                        <div>
-                            <h1 className='text-4xl mt-10 text-center mb-6'>Saved Job Postings</h1>
-                        </div>
-                        <div className='w-full flex justify-center'>
+                        <h1 className='text-4xl mt-10 text-center mb-6'>Saved Job Postings</h1>
+
+                        <div className='flex justify-center'>
                             <Table>
                                 <TableHead>
                                     <tr>
