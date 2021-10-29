@@ -4,10 +4,16 @@ import { GetServerSideProps } from 'next';
 import { verifyIdToken } from '@/lib/firebaseAdmin';
 import Header from '@/components/Header';
 import Head from 'next/head';
-import { bookmarkJob, deleteJobBookmark, getUserBookmarks } from '@/lib/db';
+import { getUserBookmarks } from '@/lib/db';
 import Loader from '@/components/Loader';
 import { JobType } from 'types/JobType';
-import JobResults from '@/components/JobResults';
+import Table from '@/components/Table';
+import TableHead from '@/components/TableHead';
+import TH from '@/components/TH';
+import TableBody from '@/components/TableBody';
+import TD from '@/components/TD';
+import { formatIsoDate } from 'utilities/formatIsoDate';
+import StatusDropDown from '@/components/StatusDropDown';
 
 const dashboard = ({ user }) => {
     const [bookmarks, setBookmarks] = useState<Array<JobType>>([]);
@@ -22,16 +28,6 @@ const dashboard = ({ user }) => {
         setBookmarks(data);
     };
 
-    const saveJob = (job: JobType) => {
-        bookmarkJob(user.uid, job);
-        getBookmarks();
-    };
-
-    const removeJob = (job: JobType) => {
-        deleteJobBookmark(user.uid, job.id);
-        getBookmarks();
-    };
-
     if (user) {
         return (
             <>
@@ -40,14 +36,61 @@ const dashboard = ({ user }) => {
                 </Head>
                 <Header />
                 <div>
-                    <h1 className='text-4xl mt-10 text-center'>Saved Job Postings</h1>
+                    <h1 className='text-4xl mt-10 text-center mb-6'>Saved Job Postings</h1>
                 </div>
-                <JobResults
-                    jobs={bookmarks}
-                    bookmarkedJobs={bookmarks}
-                    saveJob={saveJob}
-                    removeJob={removeJob}
-                />
+                <div className='w-full flex justify-center'>
+                    <Table>
+                        <TableHead>
+                            <tr>
+                                <TH>Position</TH>
+                                <TH>Company</TH>
+                                <TH>Date Saved</TH>
+                                <TH center={true}>Status</TH>
+                                <th scope='col' className='relative px-6 py-3'>
+                                    <span className='sr-only'>Link</span>
+                                </th>
+                            </tr>
+                        </TableHead>
+                        <TableBody>
+                            {bookmarks.map((bookmark) => (
+                                <tr key={bookmark.id}>
+                                    <TD>
+                                        <div className='text-sm font-medium text-gray-900'>
+                                            {bookmark.title}
+                                        </div>
+                                    </TD>
+                                    <TD>
+                                        <div className='text-sm text-gray-900'>
+                                            {bookmark.company.display_name}
+                                        </div>
+                                        <div className='text-sm text-gray-500'>
+                                            {bookmark.location.display_name}
+                                        </div>
+                                    </TD>
+                                    <TD>
+                                        <div className='text-sm text-gray-900'>
+                                            {formatIsoDate(bookmark.created)}
+                                        </div>
+                                    </TD>
+                                    <TD>
+                                        <StatusDropDown status={bookmark.status || 'No Status'} />
+                                    </TD>
+                                    <TD>
+                                        <div className='text-right text-sm font-medium'>
+                                            <a
+                                                href={bookmark.redirect_url}
+                                                target='__blank__'
+                                                className='text-indigo-600 hover:text-indigo-900'
+                                            >
+                                                Visit
+                                            </a>
+                                        </div>
+                                    </TD>
+                                </tr>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
             </>
         );
     } else {
