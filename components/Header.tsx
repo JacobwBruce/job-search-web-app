@@ -42,7 +42,6 @@ const Header = () => {
                     <div className='flex items-center'>
                         {user ? (
                             <Dropdown text={user.name || user.email}>
-                                <DropdownItem onClick={() => alert('TODO')}>Profile</DropdownItem>
                                 <DropdownItem onClick={async () => firebase.auth().signOut()}>
                                     Sign Out
                                 </DropdownItem>
