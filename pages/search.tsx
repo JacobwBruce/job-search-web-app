@@ -108,8 +108,8 @@ const Search = ({ search, where, company }) => {
 
             {alerts && (
                 <ul className='fixed bottom-6 right-6 space-y-6'>
-                    {alerts.map((alert) => (
-                        <li>
+                    {alerts.map((alert, index) => (
+                        <li key={`Toast-${index}`}>
                             <Toast title={alert.title} color={alert.color}>
                                 {alert.message}
                             </Toast>

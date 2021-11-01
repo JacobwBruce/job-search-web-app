@@ -42,7 +42,12 @@ const Header = () => {
                     <div className='flex items-center'>
                         {user ? (
                             <Dropdown text={user.name || user.email}>
-                                <DropdownItem onClick={async () => firebase.auth().signOut()}>
+                                <DropdownItem
+                                    onClick={async () => {
+                                        firebase.auth().signOut();
+                                        if (router.pathname === '/dashboard') router.push('/login');
+                                    }}
+                                >
                                     Sign Out
                                 </DropdownItem>
                             </Dropdown>
