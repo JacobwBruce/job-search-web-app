@@ -9,9 +9,9 @@ export default function Home() {
                 <title>JobSearch</title>
             </Head>
             <Header />
-            <div className='h-5/6 flex items-center'>
-                <div className='flex flex-col lg:flex-row justify-items-center mx-28 md:mx-10'>
-                    <h1 className='text-4xl mt-10 text-center font-bold mx-10 lg:text-right'>
+            <div className='h-5/6 flex md:items-center'>
+                <div className='flex flex-col md:mt-20 lg:mt-0 lg:flex-row justify-items-center mx-4 md:mx-10'>
+                    <h1 className='text-xl my-12 text-center font-bold lg:text-right lg:text-4xl md:mx-10'>
                         Welcome to{' '}
                         <span className='font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-red-500'>
                             JobSearch!
@@ -21,7 +21,11 @@ export default function Home() {
                     </h1>
 
                     <div className='text-center'>
-                        <img className='max-w-lg' src='/control_panel.svg' alt='control panel' />
+                        <img
+                            className=' max-w-full lg:max-w-lg'
+                            src='/control_panel.svg'
+                            alt='control panel'
+                        />
                     </div>
                 </div>
             </div>
