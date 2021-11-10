@@ -24,9 +24,9 @@ const JobSearchForm = () => {
                         </div>
                     </div>
 
-                    <div className='w-1 rounded bg-gray-100 h-12'></div>
+                    <div className='w-1 rounded bg-gray-100 h-12 hidden md:block'></div>
 
-                    <div>
+                    <div className='hidden md:block'>
                         <div className='mt-1 flex flex-row items-center'>
                             <BsFillBriefcaseFill className='text-gray-400 text-xl' />
                             <input
@@ -39,9 +39,9 @@ const JobSearchForm = () => {
                         </div>
                     </div>
 
-                    <div className='w-1 rounded bg-gray-100 h-12'></div>
+                    <div className='w-1 rounded bg-gray-100 h-12 hidden md:block'></div>
 
-                    <div>
+                    <div className='hidden md:block'>
                         <div className='mt-1 flex flex-row items-center'>
                             <ImLocation className='text-gray-400 text-2xl' />
                             <input
